@@ -1,0 +1,1 @@
+/* Class that will contain dict class */

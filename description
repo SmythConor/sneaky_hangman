@@ -1,4 +1,4 @@
-~~~ Flow ~~~
+	~~~ Flow ~~~
 1. Tell user 5 tries.
 2. Tell user number of letters.
 3. First letter decides first letter of word.
@@ -7,12 +7,21 @@
 6. Show relevant warnings.
 7. Show number of guesses left.
 8. User loses.
-~~~ Plan ~~~
-1. A class Dictionary with an array of sorts of strings.
-2. Size passed a parameter decided randomly each time.
-3. Adds relevant words of that length.
-4. Add these words to array of dict and check each guess.
-5. Each guess check against possible words.
-6. If there are any words without that letter return wrong
-7. If there is minimize possible words to the most possible.
-8. Repeat until player loses.
+
+	~~ Algoritm ~~ Option 1
+1. Give user prompt.
+2. Get user letter.
+3. Add all words without letter entered by user.
+4. Decrement number of gueses 
+5. Show warning.
+6. Repeat until user runs out of guesses.
+7. User loses.
+
+	~~ Algorithm ~~ Option 2
+1. Give user prompt.
+2. Get user letter.
+3. Add only the words that contain that letter in a certain position in the word.
+4. Show that letter in display word.
+5. If not there decrement guesses and show warning.
+6. Repeat again if letter there i.e add words with that letter in a certain position in the word.
+7. When user loses show loss message.
