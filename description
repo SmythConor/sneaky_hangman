@@ -1,0 +1,18 @@
+~~~ Flow ~~~
+1. Tell user 5 tries.
+2. Tell user number of letters.
+3. First letter decides first letter of word.
+4. Afterwards each guess will be correct or incorrect.
+5. Show correct letters otherwise goto 6.
+6. Show relevant warnings.
+7. Show number of guesses left.
+8. User loses.
+~~~ Plan ~~~
+1. A class Dictionary with an array of sorts of strings.
+2. Size passed a parameter decided randomly each time.
+3. Adds relevant words of that length.
+4. Add these words to array of dict and check each guess.
+5. Each guess check against possible words.
+6. If there are any words without that letter return wrong
+7. If there is minimize possible words to the most possible.
+8. Repeat until player loses.
