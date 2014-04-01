@@ -10,26 +10,99 @@
 #include <stdlib.h>
 #include <iostream>
 #include "hangman.h"
+#include "dict.h"
 
 using namespace std;
 
 /* method headers */
 
+void simple();
+void sneaky();
 int randomNumber(int n, int m); 
 string getWord();
 void displayGuesses(int g);
 void prompt();
 bool endMessage(int n);
 bool cont(int i, int k);
+void separate(); 
+void welcome();
 
 int main() { //main
+	//simple();
+	sneaky();
+}//main
+
+void sneaky() {
+	int guesses = 6;
+	int len = randomNumber(4, 7);
+	Hangman h(len);
+	Dict d(len);
+	string line;
+	welcome(); //welcome message
+
+	while(cont(guesses, len)) {
+		displayGuesses(guesses);
+		prompt(); //ask user for character
+		h.pw();
+
+		h.getChar();//getChar
+
+		cout << "just after getChar, **** CRASHING AFTER HERE ****" << endl;
+
+		line = h.returnChar();//get char from hangman
+		cout << "before reduceWords" << endl;
+		d.reduceWords(line);
+		cout << "after reduceWords" << endl;
+		string temp = d.sample();
+		h.giveWord(temp);
+
+		cout << "just before checkForChar, **** CRASHING BEFORE HERE ****" << endl;
+
+		int t = h.checkForChar();
+		
+		cout << "checkForchar" << endl;
+
+
+		if(h.validate()) {
+			h.alreadyGuessed(); //already guessed
+		}
+
+		else if(!d.checkDict(line)) {
+			h.charNotFound();
+			guesses--;
+		}
+
+		else {
+			line = d.sample();
+			h.giveWord(line);//give char to dict
+
+			h.charFound();
+			int num = h.numFound();
+			len = len - num;
+		}
+
+		separate();
+
+	}
+
+	if(endMessage(guesses)) {
+		h.win(guesses);
+	}
+
+	else {
+		h.lose();
+	}
+
+}
+
+void simple() {
 	string line = getWord(); //get word from dictionary file
 	Hangman h(line); //
-	int guesses = 5; //number of guesses 
+	int guesses = 6; //number of guesses 
 	int len = h.wordLength(); //length of word
 	int num = 0; //temp variable
 
-	cout << "Welcome to hangman." << endl; //welcome message
+	welcome(); //welcome message
 
 	while(cont(guesses, len)) {
 		displayGuesses(guesses); //display guesses left
@@ -54,6 +127,8 @@ int main() { //main
 			len = len - num;
 		}
 
+		separate();//formatting
+
 	}
 
 	if(endMessage(guesses)) { //win message
@@ -64,6 +139,14 @@ int main() { //main
 		h.lose();
 	}
 
+}
+
+void welcome() {
+	cout << "Welcome to hangman!" << endl;
+}
+
+void separate() {
+	cout << "~~~~~~~~~~~~~~~~~~~" << endl;
 }
 
 bool cont(int i, int k) { //win/loss conditions for gueses

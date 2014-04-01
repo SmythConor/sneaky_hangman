@@ -1,3 +1,6 @@
+#include <sstream>
+#include <stdlib.h>
+
 #include<iostream>
 #include<vector>
 #include<cstring>
@@ -9,7 +12,16 @@ using namespace std;
 
 class Dict {
 	private:
+		int size;
+		int wordLength;
 		vector<string> wrds;
+		string wrd();
+	public:
+		Dict(int wordLength0);
 		void reduceWords(string s);//reduces the amount of words in vector relevant
-		string wrd(); //returns one word
+		int findFreq(string s);//find the freq for reducing
+		int largest(int nums[]);//find the pos with the most
+		string sample();//give a sample
+		bool checkDict(string s);
+		void printVector(vector<string> s);
 };
