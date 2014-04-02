@@ -1,6 +1,7 @@
 /* Class that will contain dict class */
 
 #include <iostream>
+#include <iterator>
 #include <vector>
 #include <sstream>
 #include <fstream>
@@ -12,87 +13,147 @@ using namespace std;
 Dict::Dict(int wordLength0) {//added to h
 	wordLength = wordLength0;
 	size = 0;
+	for(int i = 0; i < wordLength; i++) {
+		displayWord += "_";
+	}
 }//dict
+
+void Dict::printWord() {
+	cout << displayWord << endl;
+}
+
+int Dict::reduceDisplay(string c) {
+	//cout << "start reduceDisplay" << endl;
+	//it = wrds.begin();
+	//cout << *it << endl;
+	printVector(wrds);
+	string s = wrds[0]; /****** Here *******/
+	//cout << "just after sample word" << endl;
+	int count = 0;
+	bool con = true;
+	size_t temp;
+
+	//cout << "just before reduceDisplay loop" << endl;
+
+	while(con) {
+		temp = s.rfind(c);
+
+		if(temp == string::npos) {
+			break;
+		}
+
+		else if(temp != string::npos) {
+			displayWord.replace(temp, 1, c);
+			count++;		}
+
+		s.erase(temp, 1);
+
+		temp = 0;
+	}
+
+	return count;
+
+}
 
 void Dict::reduceWords(string s) {//added to h
 	string line;
 	int pos = findFreq(s);
-	
-	cout << "before if" << endl;
 
 	if(size == 0) {//first run
 		ifstream dict("dictionary");
 		for(int i = 0; i < 45394; i++) {
 			getline(dict, line);
-			if(line.find(s) == pos && line.length() == wordLength) {
-				wrds.push_back(line);
-				size++;
+			if(line.length() == wordLength && !checkForRepeat(line)) {
+				if(line.find(s) == pos) {
+					wrds.push_back(line);
+					size++;
+				}
 			}
 
 		}
-		
-		cout << "size: " <<size << endl;
-		printVector(wrds);
+
+		//printVector(wrds);
+	}
+
+	else if(size == 2) {
+
 	}
 
 	else {//other runs
-		vector<string>::iterator it = wrds.begin();
-		for(int i = 0; i < size; i++, it++) { //needs looking at
-			if(wrds[i].find(s) == pos) {//deletes the word if character not there
+		//cout << "start" << endl;
+		it = wrds.begin();
+		//cout << "just before loop" << endl;
+		for(int i = 0; it != wrds.end(); i++) { //needs looking at
+			string w = *it;
+			int t = w.find(s);
+
+			//cout << "out t: " << t << " pos: " << pos << endl;
+
+			if(((t != string::npos) &&  (t != pos)) || (t < 0)) {//deletes the word if character there but in wrong position
+				//cout << "in t: " << t << " pos: " << pos << endl;
 				wrds.erase(it);
 				size--;
 			}
+			else {
+				++it;
+			} 
 
 		}
-		cout << size << endl;
-		printVector(wrds);
+
+		//printVector(wrds);
 	}
 
+	//cout << "SIZE: "<< size << endl;
 }//reduceWords
 
+bool Dict::checkForRepeat(string s) {
+	string temp = s;
+
+	for(int i = 0; i < wordLength - 1; i++) {
+		char c = s.at(i);
+		temp = s.substr(i + 1);
+		if(temp.find(c) != string::npos) {
+			return true;
+		}
+
+	}
+
+	return false;
+}
+
 int Dict::findFreq(string s) {//added to h
-	int pos[] = {0,0,0,0};
+	//cout << "start findFreq" << endl;
+	int pos[wordLength];
+	for(int i = 0; i < wordLength; i++) {
+		pos[i] = 0;
+	}
+	//makes here
 	int k = 0;
 	string line;
-	
-	if(size == 0) {
-		ifstream dict("dictionary");
 
-		for(int i = 0; i < 45394; i++) {
-			getline(dict, line);
-			if((line.find(s) == k) && (k <= wordLength)) {
+	it = wrds.begin();
+	//makes here
+	//word length is correct
+	while(k < wordLength) {
+		for(int i = 0; it != wrds.end(); i++, ++it) {
+			string w = *it;
+			//word is correct
+			if(w.find(s) == k && k <= wordLength) {
 				pos[k]++;
 			}
-
-			else if(k > wordLength) {
-				i = 45395;
-			}
-
-			else if(i == 45394)  {
-				i = 0;
-				k++;
-			}
+			//makes
 		}
+		k++;
+		it = wrds.begin();
 	}
 
-	else {
-		for(int i = 0; i < size; i++) {
-			if(wrds[i].find(s) == k && k <= wordLength) {
-				pos[k]++;
-			}
-
-			else if(i == (size - 1)) {
-				i = 0;
-				k++;
-			}
-
-			else if(k > wordLength) {
-				i = (size + 1);
-			}
-		}
-	}
+	//for(int i = 0; i < wordLength; i++) {
+	//	cout << pos[i] << endl;
+	//}
 
 	int freq = largest(pos);
+
+	//cout << "largest " << freq << endl;
 
 	return freq;
 }//findFreq
@@ -126,17 +187,20 @@ string Dict::sample() {//added to h
 
 
 void Dict::printVector(vector<string> s) {
+	it = wrds.begin();
 	cout << "[";
-	for(int i = 0; i < size; i++) {
+	for(int i = 0; it != wrds.end(); i++, it++) {
 		if(i == (size - 1)) {
-			cout << s[i];
+			//cout << s[i];
+			cout << *it << "]";
 		}
 
 		else {
-			cout << s[i] << ", ";
+			//cout << s[i] << ", ";
+			cout << *it << ", ";
 		}
 
 	}
 
-	cout << "]" << endl;
+	cout << endl;
 }

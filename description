@@ -1,4 +1,4 @@
-	~~~ Flow ~~~
+	~~~ Flow ~~
 1. Tell user 5 tries.
 2. Tell user number of letters.
 3. First letter decides first letter of word.
@@ -12,7 +12,7 @@
 1. Give user prompt.
 2. Get user letter.
 3. Add all words without letter entered by user.
-4. Decrement number of gueses 
+4. Decrement number of gueses.
 5. Show warning.
 6. Repeat until user runs out of guesses.
 7. User loses.
@@ -25,3 +25,8 @@
 5. If not there decrement guesses and show warning.
 6. Repeat again if letter there i.e add words with that letter in a certain position in the word.
 7. When user loses show loss message.
+
+	~~ Class and Method explanation ~~
+1. Dict class to hold the vector/array of words I will be chosing from.
+2. Dict.reduceWords to reduce the amount of words in relation to character entered.
+3. Other methods won't be changed much and are comment from the simple hangman.

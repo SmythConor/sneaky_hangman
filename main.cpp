@@ -34,33 +34,34 @@ int main() { //main
 
 void sneaky() {
 	int guesses = 6;
-	int len = randomNumber(4, 7);
+	int len = 4;//randomNumber(4, 7);
 	Hangman h(len);
 	Dict d(len);
 	string line;
+	bool track = true;
 	welcome(); //welcome message
 
 	while(cont(guesses, len)) {
 		displayGuesses(guesses);
 		prompt(); //ask user for character
-		h.pw();
+		d.printWord();
+
+		//cout << "just before getChar " << endl;
 
 		h.getChar();//getChar
 
-		cout << "just after getChar, **** CRASHING AFTER HERE ****" << endl;
+		//cout << "just after getChar, **** CRASHING AFTER HERE ****" << endl;
 
 		line = h.returnChar();//get char from hangman
-		cout << "before reduceWords" << endl;
-		d.reduceWords(line);
-		cout << "after reduceWords" << endl;
-		string temp = d.sample();
-		h.giveWord(temp);
+		if(track) {
+			d.reduceWords(line);
+		}
 
-		cout << "just before checkForChar, **** CRASHING BEFORE HERE ****" << endl;
+		//cout << "just before checkForChar, **** CRASHING BEFORE HERE ****" << endl;
 
-		int t = h.checkForChar();
+		//int t = h.checkForChar();
 		
-		cout << "checkForchar" << endl;
+		//cout << "checkForchar" << endl;
 
 
 		if(h.validate()) {
@@ -73,13 +74,17 @@ void sneaky() {
 		}
 
 		else {
-			line = d.sample();
-			h.giveWord(line);//give char to dict
-
 			h.charFound();
-			int num = h.numFound();
+			if(!track) {
+				d.reduceWords(line);
+			}
+			//cout << "just before displayWord" << endl;
+			int num = d.reduceDisplay(line);
+			//cout << "just after" << endl;
 			len = len - num;
 		}
+
+		track = false;
 
 		separate();
 

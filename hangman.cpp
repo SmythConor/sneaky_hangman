@@ -45,7 +45,11 @@ void Hangman::getChar() { //reads in char
 }//getChar added to h
 
 bool Hangman::validate() {
-	return store.find(c) == string::npos;
+	if(store.find(c) != string::npos) {
+		return true;
+	}
+	store +=c;
+	return false;
 }
 
 int Hangman::checkForChar() { //check for char in string

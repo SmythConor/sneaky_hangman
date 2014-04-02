@@ -15,7 +15,8 @@ class Dict {
 		int size;
 		int wordLength;
 		vector<string> wrds;
-		string wrd();
+		string displayWord;
+		vector<string>::iterator it;
 	public:
 		Dict(int wordLength0);
 		void reduceWords(string s);//reduces the amount of words in vector relevant
@@ -24,4 +25,7 @@ class Dict {
 		string sample();//give a sample
 		bool checkDict(string s);
 		void printVector(vector<string> s);
+		int reduceDisplay(string s);
+		void printWord();
+		bool checkForRepeat(string s);
 };
