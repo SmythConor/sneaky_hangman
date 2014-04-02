@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -8,9 +9,57 @@ void separate();
 int findFreq(string s);
 void printArray(int arr[], int len);
 int largest(int arr[], int len);
+void vectorTest();
+void printvector(vector<string> s, int l);
 
 int main() {
-	test("t");
+	//vectorTest();
+	test("e");
+}
+
+void vectorTest() {
+	vector<string> wrds;
+	int size = 0;
+	int k = 97;
+	for(int i = 0; i < 10; i++) {
+		string w = "";
+		w += k;
+		wrds.push_back(w);
+		size++;
+		k++;
+	}
+
+	printvector(wrds, size);
+
+	string c = "j";
+	vector<string>::iterator it = wrds.begin();
+
+	for(int i = 0; i < size; i++, it++) {
+	string temp = wrds[i];
+		if(temp.find(c) != string::npos) {
+			wrds.erase(it);
+			size--;
+		}
+
+	}
+
+	printvector(wrds, size);
+}
+
+void printvector(vector<string> s, int l) {
+	cout << "[";
+	for(int i = 0; i < l; i++) {
+		if(i == (l - 1)) {
+			cout << s[i] << "]";
+		}
+
+		else {
+			cout << s[i] << ", ";
+		}
+
+	}
+
+	cout << endl;
 }
 
 void test(string c) {
@@ -48,7 +97,10 @@ void separate() {
 int findFreq(string c) {
 	string s = "test";
 	int wordLength = 4;
-	int pos[] = {0, 0, 0, 0};
+	int pos[wordLength];
+	for(int i = 0; i < wordLength; i++) {
+		pos[i] = 0;
+	}
 
 	for(int k = 0; k <= wordLength; k++) {
 		if((s.find(c) == k) && (k <= wordLength)) {
