@@ -34,61 +34,46 @@ int main() { //main
 
 void sneaky() {
 	int guesses = 6;
-	int len = 4;//randomNumber(4, 7);
+	int len = randomNumber(4, 7);
 	Hangman h(len);
 	Dict d(len);
 	string line;
-	bool track = true;
 	welcome(); //welcome message
+	d.getWords();
 
 	while(cont(guesses, len)) {
 		displayGuesses(guesses);
 		prompt(); //ask user for character
 		d.printWord();
 
-		//cout << "just before getChar " << endl;
-
 		h.getChar();//getChar
 
-		//cout << "just after getChar, **** CRASHING AFTER HERE ****" << endl;
-
 		line = h.returnChar();//get char from hangman
-		if(track) {
-			d.reduceWords(line);
-		}
-
-		//cout << "just before checkForChar, **** CRASHING BEFORE HERE ****" << endl;
-
-		//int t = h.checkForChar();
-		
-		//cout << "checkForchar" << endl;
-
 
 		if(h.validate()) {
 			h.alreadyGuessed(); //already guessed
 		}
 
-		else if(!d.checkDict(line)) {
-			h.charNotFound();
-			guesses--;
-		}
-
 		else {
-			h.charFound();
-			if(!track) {
-				d.reduceWords(line);
-			}
-			//cout << "just before displayWord" << endl;
-			int num = d.reduceDisplay(line);
-			//cout << "just after" << endl;
-			len = len - num;
-		}
+			d.reduceWords(line);
 
-		track = false;
+			if(d.checkDict(line)) {
+				h.charFound();
+				len--;
+			}
+
+			else {
+				h.charNotFound();
+				guesses--;
+			}
+		}
 
 		separate();
 
 	}
+
+	string w = d.sample();
+	h.getWord(w);
 
 	if(endMessage(guesses)) {
 		h.win(guesses);

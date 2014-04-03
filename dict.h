@@ -1,10 +1,11 @@
 #include <sstream>
 #include <stdlib.h>
-
-#include<iostream>
-#include<vector>
-#include<cstring>
-#include<fstream>
+#include <iostream>
+#include <iterator>
+#include <vector>
+#include <cstring>
+#include <sstream>
+#include <fstream>
 
 using namespace std;
 
@@ -25,7 +26,8 @@ class Dict {
 		string sample();//give a sample
 		bool checkDict(string s);
 		void printVector(vector<string> s);
-		int reduceDisplay(string s);
+		int reduceDisplay(string s, int p);
 		void printWord();
 		bool checkForRepeat(string s);
+		void getWords();
 };

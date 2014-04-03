@@ -1,11 +1,5 @@
 /* Class that will contain dict class */
 
-#include <iostream>
-#include <iterator>
-#include <vector>
-#include <sstream>
-#include <fstream>
-#include <stdlib.h>
 #include "dict.h"
 
 using namespace std;
@@ -17,93 +11,77 @@ Dict::Dict(int wordLength0) {//added to h
 		displayWord += "_";
 	}
 }//dict
-
 void Dict::printWord() {
 	cout << displayWord << endl;
 }
 
-int Dict::reduceDisplay(string c) {
-	//cout << "start reduceDisplay" << endl;
-	//it = wrds.begin();
-	//cout << *it << endl;
-	printVector(wrds);
-	string s = wrds[0]; /****** Here *******/
-	//cout << "just after sample word" << endl;
-	int count = 0;
-	bool con = true;
-	size_t temp;
-
-	//cout << "just before reduceDisplay loop" << endl;
-
-	while(con) {
-		temp = s.rfind(c);
-
-		if(temp == string::npos) {
-			break;
-		}
-
-		else if(temp != string::npos) {
-			displayWord.replace(temp, 1, c);
-			count++;		}
-
-		s.erase(temp, 1);
-
-		temp = 0;
-	}
-
-	return count;
-
+int Dict::reduceDisplay(string c, int p) {
+	displayWord.replace(p, 1, c);
 }
 
-void Dict::reduceWords(string s) {//added to h
+void Dict::getWords() { //Read in words to start
 	string line;
-	int pos = findFreq(s);
 
-	if(size == 0) {//first run
-		ifstream dict("dictionary");
-		for(int i = 0; i < 45394; i++) {
-			getline(dict, line);
-			if(line.length() == wordLength && !checkForRepeat(line)) {
-				if(line.find(s) == pos) {
-					wrds.push_back(line);
-					size++;
-				}
-			}
+	ifstream dict("dictionary");
+
+	for(int i = 0; i < 45394; i++) {
+		getline(dict, line);
+
+		if(line.length() == wordLength && !checkForRepeat(line)) {
+			wrds.push_back(line);
+			size++;
 
 		}
 
-		//printVector(wrds);
 	}
 
-	else if(size == 2) {
+}//getWords
 
-	}
+void Dict::reduceWords(string s) {//
+	int pos = findFreq(s);
 
-	else {//other runs
-		//cout << "start" << endl;
-		it = wrds.begin();
-		//cout << "just before loop" << endl;
+	it = wrds.begin();
+	cout << pos << " " << wordLength << endl;
+	if(pos == wordLength) {
 		for(int i = 0; it != wrds.end(); i++) { //needs looking at
 			string w = *it;
 			int t = w.find(s);
 
-			//cout << "out t: " << t << " pos: " << pos << endl;
-
-			if(((t != string::npos) &&  (t != pos)) || (t < 0)) {//deletes the word if character there but in wrong position
-				//cout << "in t: " << t << " pos: " << pos << endl;
-				wrds.erase(it);
+			if(t != string::npos) {
+				it = wrds.erase(it);
 				size--;
 			}
+
+			else {
+				++it;
+			} 
+
+		}
+	}
+
+	else {
+		for(int i = 0; it != wrds.end(); i++) { //needs looking at
+			string w = *it;
+			int t = w.find(s);
+
+			if(t != pos) {
+				it = wrds.erase(it);
+				size--;
+			}
+
 			else {
 				++it;
 			} 
 
 		}
 
-		//printVector(wrds);
-	}
+		reduceDisplay(s, pos);
 
-	//cout << "SIZE: "<< size << endl;
+	}
+	
+	//reduceDisplay(s, pos);
+	printVector(wrds);
+
 }//reduceWords
 
 bool Dict::checkForRepeat(string s) {
@@ -122,38 +100,30 @@ bool Dict::checkForRepeat(string s) {
 }
 
 int Dict::findFreq(string s) {//added to h
-	//cout << "start findFreq" << endl;
-	int pos[wordLength];
-	for(int i = 0; i < wordLength; i++) {
+	int temp = wordLength + 1;
+	int pos[temp];
+	for(int i = 0; i < temp; i++) {
 		pos[i] = 0;
 	}
-	//makes here
-	int k = 0;
-	string line;
 
-	it = wrds.begin();
-	//makes here
-	//word length is correct
-	while(k < wordLength) {
-		for(int i = 0; it != wrds.end(); i++, ++it) {
-			string w = *it;
-			//word is correct
-			if(w.find(s) == k && k <= wordLength) {
-				pos[k]++;
-			}
-			//makes
+	for(it = wrds.begin(); it != wrds.end(); ++it) {
+		string w = *it;
+		int i = w.find(s);
+		if(i != string::npos) {
+			pos[i]++;
 		}
-		k++;
-		it = wrds.begin();
+		else {
+			pos[wordLength]++;
+		}
 	}
-
-	//for(int i = 0; i < wordLength; i++) {
-	//	cout << pos[i] << endl;
-	//}
 
 	int freq = largest(pos);
 
-	//cout << "largest " << freq << endl;
+	for(int i = 0; i < temp; i++) {
+		cout << pos[i] << " ";
+	}
+
+	cout << endl;
 
 	return freq;
 }//findFreq
@@ -161,7 +131,7 @@ int Dict::findFreq(string s) {//added to h
 int Dict::largest(int nums[]) {//added to h
 	int most = 0;
 
-	for(int i = 0; i < wordLength; i++) {
+	for(int i = 0; i < wordLength + 1; i++) {
 		if(nums[i] > most) {
 			most = i;
 		}
@@ -181,11 +151,6 @@ bool Dict::checkDict(string s) {
 	return false;
 }
 
-string Dict::sample() {//added to h
-	return wrds[0];
-}//sample
-
-
 void Dict::printVector(vector<string> s) {
 	it = wrds.begin();
 	cout << "[";
@@ -203,4 +168,8 @@ void Dict::printVector(vector<string> s) {
 	}
 
 	cout << endl;
+}
+
+string Dict::sample() {
+	return wrds[0];
 }

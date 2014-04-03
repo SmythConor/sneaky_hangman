@@ -27,10 +27,6 @@ Hangman::Hangman(string w1) { //initailise Hangman added to h
 	}
 }//Hangman added to h
 
-void Hangman::giveWord(string s) {
-	word = s;
-}//giveWord added to h
-
 void Hangman::getChar() { //reads in char
 	bool corr = true;
 	while(corr) {
@@ -116,6 +112,11 @@ void Hangman::charNotFound() { //warn char not found
 	cout << "Character not found." << endl;
 }//charNotFound added to h
 
+
+void Hangman::getWord(string s) {
+	word = s;
+}
+
 void Hangman::lose() { //loss message
 	cout << "Out of guesses hard luck." << endl;
 	cout << "The word was " << word << endl;
@@ -128,6 +129,5 @@ void Hangman::win(int g) { //win message
 }//win added to h
 
 void Hangman::pw() { //print out the underscores for user
-	//cout << word << endl;
 	cout << displayWord << endl;
-}//pw added to h
+}//p

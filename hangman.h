@@ -35,6 +35,6 @@ class Hangman {
 		void alreadyGuessed();
 		int numFound();
 		bool oneChar(string s);
-		void giveWord(string s);
+		void getWord(string s);
 		bool validate();
 };
