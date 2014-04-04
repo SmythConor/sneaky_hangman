@@ -2,48 +2,53 @@
 
 #include "dict.h"
 
-using namespace std;
-
-Dict::Dict(int wordLength0) {//added to h
+Dict::Dict(int wordLength0) { //initialise Dict
 	wordLength = wordLength0;
 	size = 0;
 	for(int i = 0; i < wordLength; i++) {
 		displayWord += "_";
 	}
 }//dict
-void Dict::printWord() {
-	cout << displayWord << endl;
-}
-
-int Dict::reduceDisplay(string c, int p) {
-	displayWord.replace(p, 1, c);
-}
 
 void Dict::getWords() { //Read in words to start
-	string line;
+	string line; //var to get words
 
-	ifstream dict("dictionary");
+	ifstream dict("dictionary"); //file to read in
 
-	for(int i = 0; i < 45394; i++) {
+	for(int i = 0; i < 45394; i++) { //loop over all words
 		getline(dict, line);
 
-		if(line.length() == wordLength && !checkForRepeat(line)) {
+		if(line.length() == wordLength && !checkForRepeat(line)) { //No repeated letter and correct length
 			wrds.push_back(line);
 			size++;
-
 		}
 
 	}
 
 }//getWords
 
-void Dict::reduceWords(string s) {//
-	int pos = findFreq(s);
+bool Dict::checkForRepeat(string s) { //check for repeated letters
+	string temp = s; //temp var to hold word
 
-	it = wrds.begin();
-	cout << pos << " " << wordLength << endl;
-	if(pos == wordLength) {
-		for(int i = 0; it != wrds.end(); i++) { //needs looking at
+	for(int i = 0; i < wordLength - 1; i++) { //look for repeated letter
+		char c = s.at(i);
+		temp = s.substr(i + 1);
+		if(temp.find(c) != string::npos) {
+			return true;
+		}
+
+	}
+
+	return false;
+}//checkForRepeat
+
+void Dict::reduceWords(string s) { //reduce the amount of words left in the dict
+	int pos = findFreq(s); //find the positon it occurs the most, or not at all
+
+	it = wrds.begin(); //initailise iterator
+
+	if(pos == wordLength) { //if found in the most remove them words
+		for(int i = 0; it != wrds.end(); i++) {
 			string w = *it;
 			int t = w.find(s);
 
@@ -57,10 +62,10 @@ void Dict::reduceWords(string s) {//
 			} 
 
 		}
-	}
+	}//
 
-	else {
-		for(int i = 0; it != wrds.end(); i++) { //needs looking at
+	else { //otherwise remove any word with that letter
+		for(int i = 0; it != wrds.end(); i++) {
 			string w = *it;
 			int t = w.find(s);
 
@@ -73,62 +78,38 @@ void Dict::reduceWords(string s) {//
 				++it;
 			} 
 
-		}
+		}//
 
-		reduceDisplay(s, pos);
+		reduceDisplay(s, pos); //now reduce the display word
 
 	}
-	
-	//reduceDisplay(s, pos);
-	printVector(wrds);
 
 }//reduceWords
 
-bool Dict::checkForRepeat(string s) {
-	string temp = s;
-
-	for(int i = 0; i < wordLength - 1; i++) {
-		char c = s.at(i);
-		temp = s.substr(i + 1);
-		if(temp.find(c) != string::npos) {
-			return true;
-		}
-
-	}
-
-	return false;
-}
-
-int Dict::findFreq(string s) {//added to h
+int Dict::findFreq(string s) { //find frequency of char in each position
 	int temp = wordLength + 1;
-	int pos[temp];
+	int pos[temp]; //array to count the position
 	for(int i = 0; i < temp; i++) {
 		pos[i] = 0;
 	}
 
-	for(it = wrds.begin(); it != wrds.end(); ++it) {
+	for(it = wrds.begin(); it != wrds.end(); ++it) { //check words for character position
 		string w = *it;
 		int i = w.find(s);
 		if(i != string::npos) {
-			pos[i]++;
+			pos[i]++; //increment relevant position
 		}
 		else {
-			pos[wordLength]++;
+			pos[wordLength]++; //otherwise not there
 		}
 	}
 
-	int freq = largest(pos);
-
-	for(int i = 0; i < temp; i++) {
-		cout << pos[i] << " ";
-	}
-
-	cout << endl;
+	int freq = largest(pos); //return largest positon
 
 	return freq;
 }//findFreq
 
-int Dict::largest(int nums[]) {//added to h
+int Dict::largest(int nums[]) { //returns largest in array
 	int most = 0;
 
 	for(int i = 0; i < wordLength + 1; i++) {
@@ -141,7 +122,11 @@ int Dict::largest(int nums[]) {//added to h
 	return most;
 }//largest
 
-bool Dict::checkDict(string s) {
+int Dict::reduceDisplay(string c, int p) { //reduce the display word
+	displayWord.replace(p, 1, c);
+}//reduceDisplay
+
+bool Dict::checkDict(string s) { //check the dict for the letter
 	for(int i = 0; i < size; i++) {
 		if(wrds[i].find(s) != string::npos) {
 			return true;
@@ -149,27 +134,12 @@ bool Dict::checkDict(string s) {
 	}
 
 	return false;
-}
+}//checkDict
 
-void Dict::printVector(vector<string> s) {
-	it = wrds.begin();
-	cout << "[";
-	for(int i = 0; it != wrds.end(); i++, it++) {
-		if(i == (size - 1)) {
-			//cout << s[i];
-			cout << *it << "]";
-		}
-
-		else {
-			//cout << s[i] << ", ";
-			cout << *it << ", ";
-		}
-
-	}
-
-	cout << endl;
-}
-
-string Dict::sample() {
+string Dict::sample() { //return a sample word
 	return wrds[0];
-}
+}//sample
+
+void Dict::printWord() { //print the display word
+	cout << displayWord << endl;
+}//printWord

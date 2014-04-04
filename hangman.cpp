@@ -1,52 +1,44 @@
 /* Conor Smyth 12452382
  * Normal Hangman class 
+ * Now includes some sneaky features
  * All work is my own
  */
 
-#include <vector>
-#include <sstream>
-#include <fstream>
-
-#include <iostream>
-#include <stdlib.h>
-#include <string>
 #include "hangman.h"
 
-using namespace std;
-
-Hangman::Hangman(int l) {
-	for(int i = 0; i < l; i++) {
+Hangman::Hangman(int l) { //initialise hangman
+	for(int i = 0; i < l; i++) { //fill display word
 		displayWord += "_";
 	}
-}//added to h
+}//Hangman
 
-Hangman::Hangman(string w1) { //initailise Hangman added to h
+Hangman::Hangman(string w1) { //initailise Hangman
 	word = w1;
 	for(int i = 0; i < word.length(); i++) { //display underscores for users
 		displayWord += "_";
 	}
-}//Hangman added to h
+}//Hangman
+
+int Hangman::wordLength() { //return word length
+	return word.length();
+}//wordLength
+
+void Hangman::pw() { //print out the underscores for user
+	cout << displayWord << endl;
+}//pw
 
 void Hangman::getChar() { //reads in char
 	bool corr = true;
-	while(corr) {
-		cin >> c;
-		if(c.length() > 1) {
-			cout << "Please enter only one character." << endl;
+	while(corr) { //makes sure one char only
+		cin >> c; //read in
+		if(c.length() > 1) { //ensure length == 1
+			cout << "Please enter only one character." << endl; //show warning
 		}
 		else {
 			corr = false;
 		}
 	}
-}//getChar added to h
-
-bool Hangman::validate() {
-	if(store.find(c) != string::npos) {
-		return true;
-	}
-	store +=c;
-	return false;
-}
+}//getChar
 
 int Hangman::checkForChar() { //check for char in string
 	int t = store.find(c); //store entered chars
@@ -57,26 +49,34 @@ int Hangman::checkForChar() { //check for char in string
 		return 0; //0 for already guessed
 	}
 
-	t = word.find(c);
+	t = word.find(c); //check if in word
 
 	if(t < 0) { // If character not there
 		return -1; //-1 for not there
 	}
 
 	return 1; //1 for char existance
-}//checkForChar added to h
+}//checkForChar
+
+void Hangman::charNotFound() { //warn char not found
+	cout << "Character not found." << endl;
+}//charNotFound
+
+bool Hangman::validate() { //validate
+	if(store.find(c) != string::npos) { //checks if in string
+		return true;
+	}
+	store +=c; //if not add to store and return false
+	return false;
+}//validate
 
 void Hangman::alreadyGuessed() { //print that char was already guessed
 	cout << "Character already guessed!" << endl;
-}//alreadyGuessed added to h
+}//alreadyGuessed
 
 void Hangman::charFound() { //print that char was found
 	cout << "Character found!" << endl;
-}//charFound added to h
-
-string Hangman::returnChar() {
-	return c;
-}//returnChar added to h
+}//charFound
 
 int Hangman::numFound() { //find the number of times char was found
 	string s = word; //temp varialbe for word
@@ -84,7 +84,7 @@ int Hangman::numFound() { //find the number of times char was found
 	bool con = true;
 	size_t temp;
 
-	while(con) {
+	while(con) { //in case repeated letters
 		temp = s.rfind(c);
 
 		if(temp == string::npos) { //char not there anymore
@@ -102,32 +102,24 @@ int Hangman::numFound() { //find the number of times char was found
 	}
 
 	return count; //return number of instances of char
-}//numFound added to h
-
-int Hangman::wordLength() { //return word length
-	return word.length();
-}//wordLength added to h
-
-void Hangman::charNotFound() { //warn char not found
-	cout << "Character not found." << endl;
-}//charNotFound added to h
-
-
-void Hangman::getWord(string s) {
-	word = s;
-}
-
-void Hangman::lose() { //loss message
-	cout << "Out of guesses hard luck." << endl;
-	cout << "The word was " << word << endl;
-}//lose added to h
+}//numFound
 
 void Hangman::win(int g) { //win message
 	cout << "Congratulations you have won!" << endl;
 	cout << "You had " << g << " guesses left!"<< endl;
 	cout << "The word was " << word << endl;
-}//win added to h
+}//win
 
-void Hangman::pw() { //print out the underscores for user
-	cout << displayWord << endl;
-}//p
+void Hangman::lose() { //loss message
+	cout << "Out of guesses hard luck." << endl;
+	cout << "The word was " << word << endl;
+}//lose
+
+string Hangman::returnChar() { //returns the char read in
+	return c;
+}//returnChar
+
+
+void Hangman::getWord(string s) { //gets a word
+	word = s;
+}//getWord

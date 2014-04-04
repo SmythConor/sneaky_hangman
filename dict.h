@@ -19,15 +19,14 @@ class Dict {
 		string displayWord;
 		vector<string>::iterator it;
 	public:
-		Dict(int wordLength0);
-		void reduceWords(string s);//reduces the amount of words in vector relevant
-		int findFreq(string s);//find the freq for reducing
-		int largest(int nums[]);//find the pos with the most
-		string sample();//give a sample
-		bool checkDict(string s);
-		void printVector(vector<string> s);
-		int reduceDisplay(string s, int p);
-		void printWord();
-		bool checkForRepeat(string s);
-		void getWords();
+		Dict(int wordLength0); //1
+		void getWords(); //2
+		bool checkForRepeat(string s); //just after 2
+		void reduceWords(string s);//reduces the amount of words in vector relevant //3
+		int findFreq(string s);//find the freq for reducing //just after 3
+		int largest(int nums[]);//find the pos with the most //just after find freq before reduce
+		int reduceDisplay(string s, int p); //just after findfreq
+		bool checkDict(string s); //4
+		string sample();//give a sample //5
+		void printWord(); //last
 };
